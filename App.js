@@ -1,27 +1,21 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { AppLoading } from 'expo-app-loading';
-import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
+import { enableScreens } from 'react-native-screens';
 
 import MealsNavigator from './navigation/MealsNavigator';
 
-const fetchFonts = () => {
-  Font.loadAsync({
-    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
-  })
-}
+enableScreens(); // Better performance behind the scenes
 
 export default function App() {
-  const [fontLoaded, setFontLoaded] = useState(false);
+  let [fontsLoaded] = useFonts({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  });
 
-  if (!fontLoaded) {
-    <AppLoading
-      startAsync={fetchFonts}
-      onFinish={() => setFontLoaded(true)}
-      onError={(err) => console.log(err)}
-    />
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
 
   return (
