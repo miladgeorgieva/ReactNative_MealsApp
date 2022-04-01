@@ -1,9 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView, Image, View, Text, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import { MEALS } from '../data/dummy-data';
 import CustomHeaderButton from '../components/HeaderButton';
+import DefaultText from '../components/DefaultText';
+
+const ListItem = props => {
+    return <View style={styles.listItem}>
+        <DefaultText style={{textAlign: 'left'}}>{props.children}</DefaultText>
+    </View>
+}
 
 // import { MEALS } from '..'
 
@@ -13,10 +20,20 @@ const MealDetailsScreen = props => {
     const selectedMeal = MEALS.find(meal => meal.id === mealId);
 
     return (
-        <View style={styles.screen}>
-            <Text>{selectedMeal.title}</Text>
-            <Text>Meal Details Screen</Text>
-        </View>
+        <ScrollView>
+            <Image source={{uri: selectedMeal.imageUrl}} style={styles.image}/>
+            <View style={styles.details}>
+                <DefaultText>{selectedMeal.duration}m</DefaultText>
+                <DefaultText>{selectedMeal.complexity.toUpperCase()}</DefaultText>
+                <DefaultText>{selectedMeal.affordability.toUpperCase()}</DefaultText>
+            </View>
+            <View style={styles.contentsContainer}>
+                <Text style={{...styles.title, ...{marginTop: 0}}}>Ignredients</Text>
+                {selectedMeal.ingredients.map(ingredient => <ListItem key={ingredient}>{ingredient}</ListItem>)}
+                <Text style={styles.title}>Steps</Text>
+                {selectedMeal.steps.map(step => <ListItem key={step}>{}{step}</ListItem>)}
+            </View>
+        </ScrollView>
     );
 };
 
@@ -34,10 +51,27 @@ MealDetailsScreen.navigationOptions = (navigationData) => {
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+    image: {
+        width: '100%',
+        height: 200
+    },
+    details: {
+        flexDirection: 'row',
+        padding: 15,
+        justifyContent: 'space-around'
+    },
+    contentsContainer: {
+        paddingVertical: 20,
+        paddingHorizontal: 10
+    },
+    title: {
+        fontFamily: 'open-sans-bold',
+        fontSize: 22,
+        marginBottom: 15,
+        marginTop: 30
+    },
+    listItem: {
+        textAlign: 'left'
     }
 });
 

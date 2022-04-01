@@ -9,6 +9,7 @@ import {
     Platform,
     TouchableNativeFeedback 
 } from 'react-native';
+import DefaultText from './DefaultText';
 
 const MealItem = props => {
     let TouchableComponent = TouchableOpacity;
@@ -29,9 +30,9 @@ const MealItem = props => {
                         </ImageBackground>
                     </View>
                     <View style={{...styles.mealRow, ...styles.mealDetail}}>
-                        <Text style={styles.detailText}>{props.duration}m</Text>
-                        <Text style={styles.detailText}>{props.complexity.toUpperCase()}</Text>
-                        <Text style={styles.detailText}>{props.affordability.toUpperCase()}</Text>
+                        <DefaultText style={styles.detailText}>{props.duration}m</DefaultText>
+                        <DefaultText style={styles.detailText}>{props.complexity.toUpperCase()}</DefaultText>
+                        <DefaultText style={styles.detailText}>{props.affordability.toUpperCase()}</DefaultText>
                     </View>
                 </View>
             </TouchableComponent>
@@ -62,15 +63,11 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10
     },
     mealDetail: {
+        fontFamily: 'open-sans',
         height: '20%',
         paddingHorizontal: 10,
         justifyContent: 'space-between',
         alignItems: 'center'
-    },
-    detailText: {
-        fontFamily: 'open-sans-bold',
-        fontSize: 14,
-        textAlign: 'center',
     },
     bgImage: {
         width: '100%',
