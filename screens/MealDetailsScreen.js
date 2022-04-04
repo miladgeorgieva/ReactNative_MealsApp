@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, Image, View, Text, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector } from 'react-redux';
 
-import { MEALS } from '../data/dummy-data';
 import CustomHeaderButton from '../components/HeaderButton';
 import DefaultText from '../components/DefaultText';
 
@@ -12,12 +12,18 @@ const ListItem = props => {
     </View>
 }
 
-// import { MEALS } from '..'
-
 const MealDetailsScreen = props => {
+    const availableMeals = useSelector(state => state.meals.meals)
     const mealId = props.navigation.getParam('mealId');
 
-    const selectedMeal = MEALS.find(meal => meal.id === mealId);
+    const selectedMeal = availableMeals.find(meal => meal.id === mealId);
+
+    // using useEffect so we don't end up in infinite loop (because props are changing)
+    // -- but there's a problem - the title loads just after the component loads the first time which makes it appear a bit later
+    // useEffect(() => {
+    //     props.navigation.setParams({mealTitle: selectedMeal.title});
+    // }, [selectedMeal]);
+
 
     return (
         <ScrollView>
@@ -39,10 +45,10 @@ const MealDetailsScreen = props => {
 
 MealDetailsScreen.navigationOptions = (navigationData) => {
     const mealId = navigationData.navigation.getParam('mealId');
-    const selectedMeal = MEALS.find(meal => meal.id === mealId);
+    const mealTitle = navigationData.navigation.getParam('mealTitle');
 
     return {
-        headerTitle: selectedMeal.title,
+        headerTitle: mealTitle,
         headerRight: () => 
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
             <Item title='Favorite' iconName='ios-heart-outline' onPress={() => {console.log('marked as fav')}}/>
